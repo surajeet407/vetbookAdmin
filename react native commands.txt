@@ -6,7 +6,7 @@ database().ref("/").set()
 razorpay test key: rzp_test_EIvDuWAtnslSuW
 razor pay key secret: r5hlyi0Sb7n3WI7GU8NjrRNP
 
-vetbook admin app steps to develop-----------------------------------------------------------
+vetbook app steps to develop-----------------------------------------------------------
 1.create project----- 
     npx react-native init PetBook then copy src, App.js, index.js, package.json, react-native.config.js to root folder of project
 

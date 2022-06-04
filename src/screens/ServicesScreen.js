@@ -57,14 +57,19 @@ const ServicesScreen = ({navigation, route}) => {
 
     const getDataFromDatabase = () => {
         database()
-            .ref("/users")
+            .ref("/allServices")
             .once('value')
             .then(snapshot => {
                 setLoading(false)
                 setRefreshing(false)
                 if (snapshot.val()) {
-                    // let items = snapshot.val().filter(item => item.mode === filter)
-                    // setPastServices(items);
+                    let ar = []
+                    for(let i = 0; i < snapshot.val().length; i++) {
+                        if(snapshot.val()[i].mode === 'ongoing') {
+                            ar.push(snapshot.val()[i])
+                        }
+                    }
+                    setPastServices(ar)
                 }
             })
     }
@@ -136,15 +141,7 @@ const ServicesScreen = ({navigation, route}) => {
                             marginTop: 5,
                             marginBottom: 10
                         }}>
-                            <View >
-                                <Title
-                                    size={16}
-                                    label={"Details of Booking: "}
-                                    bold={true}
-                                    color={Colors.primary}/>
-                            </View>
                             <View>
-                                    <Title size={15} label={"Transaction Id: " + item.txnId} bold={true} color={Colors.darkGray}/>
                                     <View
                                         style={{
                                         flexDirection: 'row',
@@ -175,6 +172,34 @@ const ServicesScreen = ({navigation, route}) => {
                                     
                             </View>
                         </View>
+                        <View style={{
+                                    borderTopColor: Colors.darkGray,
+                                    borderTopWidth: 1,
+                                    padding: 5}}>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        marginTop: 5
+                                    }}>
+                                        <View
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title size={14} label={'Time Slot:  ' + item.timeSlot.startTime + " - " + item.timeSlot.endTime} bold={true} color={Colors.secondary}/>
+                                        </View>
+                                        <Button
+                                            labelStyle={{
+                                            color: Colors.white,
+                                            fontFamily: 'PTSerif-Bold'
+                                        }}
+                                            color={Colors.green3}
+                                            mode="contained"
+                                            onPress={() => onPressCancel(item, item.serviceType)}>Details</Button>
+                                    </View>
+                                </View>
                     </Animatable.View>
                 )
             }}/>

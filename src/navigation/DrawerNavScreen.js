@@ -18,7 +18,6 @@ import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import Colors from '../util/Colors';
 import i18n from '../util/i18n';
-import HomeScreen from '../screens/HomeScreen';
 
 
 const Drawer = createDrawerNavigator();
@@ -52,11 +51,11 @@ const DrawerNavScreen = ({navigation, route}) => {
                         marginLeft: -20
                     },
                     drawerIcon: ({color}) => (
-                        <Icon type={Icons.Ionicons} name={'bicycle'} size={22} color={color}/>
+                        <Icon type={Icons.Ionicons} name={'bicycle'} size={22} color={Colors.darkGray}/>
                     )
                 }}
                 name="Services"
-                component={HomeScreen}
+                component={ServicesScreen}
             ></Drawer.Screen>
             <Drawer.Screen
                 options={{

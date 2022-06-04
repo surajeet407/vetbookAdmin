@@ -44,7 +44,7 @@ import NetInfo from "@react-native-community/netinfo";
   const [groomingServiceCount, setGroomingServiceCount] = useState(0)
   const [trainingServiceCount, setTrainingServiceCount] = useState(0)
   const [trackDetails, setTrackDetails] = useState(null)
-  const [status, setStatus] = useState(route.params.status);
+  const [status, setStatus] = useState('loggedIn');
   const [showTrackComponent, setShowTrackComponent] = useState(false)
   const [homePageCarouselServices, setHomePageCarouselServices] = useState([]);
   const [mainServices, setMainServices] = useState([]);

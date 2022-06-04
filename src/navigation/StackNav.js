@@ -13,7 +13,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import database, {firebase} from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 import ServicesBottomTabBarScreen from '../navigation/ServicesBottomTabBarScreen';
-import HomeBottomTabBarScreen from '../navigation/HomeBottomTabBarScreen';
+import DrawerNavScreen from '../navigation/DrawerNavScreen';
 import SpalshScreen from '../screens/SpalshScreen';
 import LogScreen from '../screens/LogScreen';
 import OTPScreen from '../screens/OTPScreen';
@@ -80,28 +80,7 @@ const StackNav = (params) => {
             theme={scheme === 'dark'
             ? DarkTheme
             : DefaultTheme}>
-            <Stack.Navigator
-                initialRouteName={status === "loggedIn"
-                ? "HomeBottomTabBar"
-                : "Splash"}>
-                <Stack.Screen
-                    options={{
-                    headerShown: false
-                }}
-                    name="Splash"
-                    component={SpalshScreen}/>
-                <Stack.Screen
-                    options={{
-                    headerShown: false
-                }}
-                    name="Log"
-                    component={LogScreen}/>
-                <Stack.Screen
-                    options={{
-                    headerShown: false
-                }}
-                    name="OTP"
-                    component={OTPScreen}/>
+            <Stack.Navigator>
                 <Stack.Screen
                     options={{
                     headerShown: false
@@ -109,8 +88,8 @@ const StackNav = (params) => {
                     initialParams={{
                     status: params.status
                 }}
-                    name="HomeBottomTabBar"
-                    component={HomeBottomTabBarScreen}/>
+                    name="DrawerNav"
+                    component={DrawerNavScreen}/>
                 <Stack.Screen
                     options={{
                     headerShown: false

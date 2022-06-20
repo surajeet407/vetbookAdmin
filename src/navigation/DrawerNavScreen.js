@@ -10,7 +10,7 @@ import {
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawerContent';
 import ServicesScreen from '../screens/ServicesScreen';
-import OrdersScreen from '../screens/SettingsScreen';
+import OrdersScreen from '../screens/OrdersScreen';
 import RelocationsScreen from '../screens/RelocationsScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
 
@@ -43,20 +43,7 @@ const DrawerNavScreen = ({navigation, route}) => {
                 fontSize: 15
             }
         }} drawerContent={props => <CustomDrawerContent {...props}/>}>
-            <Drawer.Screen
-                options={{
-                    headerTitleStyle: {
-                        fontFamily: "Redressed-Regular",
-                        color: Colors.darkGray,
-                        marginLeft: -20
-                    },
-                    drawerIcon: ({color}) => (
-                        <Icon type={Icons.Ionicons} name={'bicycle'} size={22} color={Colors.darkGray}/>
-                    )
-                }}
-                name="Services"
-                component={ServicesScreen}
-            ></Drawer.Screen>
+            
             <Drawer.Screen
                 options={{
                     tabBarShowLabel: true,
@@ -66,6 +53,16 @@ const DrawerNavScreen = ({navigation, route}) => {
                 }}
                 name="Orders"
                 component={OrdersScreen}
+            ></Drawer.Screen>
+            <Drawer.Screen
+                options={{
+                    tabBarShowLabel: true,
+                    drawerIcon: ({color}) => (
+                        <Icon type={Icons.Ionicons} name={'bicycle'} size={22} color={color}/>
+                    )
+                }}
+                name="Services"
+                component={ServicesScreen}
             ></Drawer.Screen>
             <Drawer.Screen
                 options={{

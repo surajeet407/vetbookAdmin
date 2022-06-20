@@ -12,10 +12,8 @@ import {
     RefreshControl
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import GeneralHeader from '../reusable_elements/GeneralHeader';
 import ServiceScreenLoader from '../reusable_elements/ServiceScreenLoader';
 import Colors from '../util/Colors';
-import {SwipeListView} from 'react-native-swipe-list-view';
 import Title from '../reusable_elements/Title';
 import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
@@ -47,13 +45,8 @@ const ServicesScreen = ({navigation, route}) => {
     const [refreshing, setRefreshing] = useState(false);
     const [loading,
         setLoading] = useState(true)
-    const [pickerValue, 
-        setPickerValue] = useState("");
-    const [catIndex,
-        setCatIndex] = useState(0);
     const [pastServices,
         setPastServices] = useState([])
-    const reOrder = () => {}
 
     const getDataFromDatabase = () => {
         database()
@@ -74,12 +67,6 @@ const ServicesScreen = ({navigation, route}) => {
             })
     }
     
-    const handleCustomIndexSelect = (index) => {
-        setLoading(true)
-        setCatIndex(index)
-        setPickerValue("")
-        getDataFromDatabase();
-    }
     const onRefresh = () => {
         setRefreshing(true)
         getDataFromDatabase();
@@ -197,7 +184,7 @@ const ServicesScreen = ({navigation, route}) => {
                                         }}
                                             color={Colors.green3}
                                             mode="contained"
-                                            onPress={() => onPressCancel(item, item.serviceType)}>Details</Button>
+                                            onPress={() => navigation.navigate("ServiceDetails", {item: item})}>Details</Button>
                                     </View>
                                 </View>
                     </Animatable.View>

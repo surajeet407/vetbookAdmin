@@ -47,143 +47,37 @@ const RelocationsScreen = ({navigation, route}) => {
     const [refreshing, setRefreshing] = useState(false);
     const [loading,
         setLoading] = useState(true)
-    const [itemId, 
-        setItemId] = useState("");
-    const [pickerValue, 
-        setPickerValue] = useState("");
-    const [phoneNo,
-        setPhoneNo] = useState("");
-    const [catIndex,
-        setCatIndex] = useState(0);
-    const [status,
-        setStatus] = useState(route.params.status);
     const [pastRelocations,
         setPastRelocations] = useState([])
-    const reOrder = () => {}
 
-
-    const getDataFromStorage = (filter) => {
-        AsyncStorage
-            .getItem("anonymusRelocations")
-            .then((data) => {
-                setLoading(false)
-                setRefreshing(false)
-                if (data && JSON.parse(data).length > 0) {
-                    let allItem = JSON.parse(data);
-                    let items = allItem.filter(item => item.mode === filter)
-                    let pickerValArray = [],
-                        obj = {
-                            value: "Select reason for cancellation"
-                        }
-                    for(let i = 0; i < items.length; i++){
-                        pickerValArray.push(obj)
-                    }
-                    setPickerValue(pickerValArray)
-                    setPastRelocations(items);
-                }
-            });
-    }
-    const getDataFromDatabase = (phoneNo, filter) => {
+    const getDataFromDatabase = () => {
         database()
-            .ref("/users/" + phoneNo + "/relocations")
+            .ref("/allServices")
             .once('value')
             .then(snapshot => {
                 setLoading(false)
                 setRefreshing(false)
                 if (snapshot.val()) {
-                    let items = snapshot.val().filter(item => item.mode === filter)
-                    let pickerValArray = [],
-                        obj = {
-                            value: "Select reason for cancellation"
+                    let ar = []
+                    for(let i = 0; i < snapshot.val().length; i++) {
+                        if(snapshot.val()[i].mode === 'ongoing') {
+                            ar.push(snapshot.val()[i])
                         }
-                    for(let i = 0; i < items.length; i++){
-                        pickerValArray.push(obj)
                     }
-                    setPickerValue(pickerValArray)
-                    setPastRelocations(items);
+                    setPastRelocations(ar)
                 }
             })
     }
 
-    
-    const onPressCancel = (item) => {
-        navigation.navigate("Cancel", {type: "relocation", data: [
-            {
-                id: 1,
-                label: "I have changed my mind",
-                value: "I have changed my mind",
-                labelStyle: {
-                    fontFamily: 'Redressed-Regular',
-                    fontSize: 18
-                }
-            }, {
-                id: 2,
-                label: "Solved by local partner",
-                value: "Solved by local partner",
-                labelStyle: {
-                    fontFamily: 'Redressed-Regular',
-                    fontSize: 18
-                }
-            }, {
-                id: 3,
-                label: "Somewhat not satisfied with the privious service",
-                value: "Somewhat not satisfied with the privious service",
-                labelStyle: {
-                    fontFamily: 'Redressed-Regular',
-                    fontSize: 18
-                }
-            }, {
-                id: 4,
-                label: "On my own",
-                value: "On my own",
-                labelStyle: {
-                    fontFamily: 'Redressed-Regular',
-                    fontSize: 18
-                }
-            }, {
-                id: 5,
-                label: "Don't want to share",
-                value: "Don't want to share",
-                labelStyle: {
-                    fontFamily: 'Redressed-Regular',
-                    fontSize: 18
-                }
-            }
-        ], item: item})
-    }
-
-    const handleCustomIndexSelect = (index) => {
-        setLoading(true)
-        setCatIndex(index)
-        setPickerValue("")
-        if (status === 'loggedIn') {
-            getDataFromDatabase(phoneNo, filters[index].key);
-        } else {
-            getDataFromStorage(filters[index].key)
-        }
-    }
 
     const onRefresh = () => {
         setRefreshing(true)
-        if (status === 'loggedIn') {
-            getDataFromDatabase(phoneNo, filters[catIndex].key);
-        } else {
-            getDataFromStorage(filters[catIndex].key)
-        }
+        getDataFromDatabase();
     }
 
     useEffect(() => {
         if (isFocused) {
-            if (status === 'loggedIn') {
-                AsyncStorage
-                .getItem('phoneNo')
-                .then((phoneNo, msg) => {
-                    setPhoneNo(phoneNo)
-                    getDataFromDatabase(phoneNo, "ongoing");
-                })
-            } else {
-                getDataFromStorage("ongoing")
-            }
+            getDataFromDatabase();
         }
     }, [isFocused])
     return (
@@ -192,53 +86,6 @@ const RelocationsScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            <GeneralHeader
-                showRigtIcon={false}
-                rightIconType={Icons.MaterialIcons}
-                rightIconName={'navigate-before'}
-                rightIconSize={35}
-                rightIconColor={Colors.black}
-                rightIconBackgroundColor={Colors.appBackground}
-                onPressRight={() => navigation.goBack()}
-                showRightSideText={false}
-                rightSideText={''}
-                rightSideTextSize={20}
-                rightSideTextColor={Colors.secondary}
-                subHeaderText="See all your booked relocations..."
-                showSubHeaderText={false}
-                subHeaderTextSize={20}
-                subHeaderTextColor={Colors.secondary}
-                position={'relative'}
-                headerHeight={80}
-                headerText={'Relocations'}
-                headerTextSize={25}
-                headerTextColor={Colors.primary}
-                showHeaderText={true}
-                showLeftIcon={true}
-                leftIconType={Icons.MaterialIcons}
-                leftIconName={'navigate-before'}
-                leftIconSize={35}
-                leftIonColor={Colors.black}
-                leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings", status: status})}/>
-                <View
-                    style={{
-                    paddingHorizontal: 20,
-                    alignItems: 'center',
-                    width: '100%'
-                    }}>
-                <SegmentedControlTab
-                    values={["Ongoing", "Cancelled", "Completed"]}
-                    borderRadius={0}
-                    tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
-                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.white, borderWidth: 1 }}
-                    activeTabStyle={{ backgroundColor: Colors.green }}
-                    tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
-                    activeTabTextStyle={{ color: Colors.white }}
-                    selectedIndex={catIndex}
-                    onTabPress={handleCustomIndexSelect}
-                    />
-            </View>
             {loading?
             <View style={{paddingHorizontal: 20}}>
                 <ServiceScreenLoader/>

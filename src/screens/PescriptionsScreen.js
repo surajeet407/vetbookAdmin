@@ -44,22 +44,13 @@ const PescriptionsScreen = ({navigation, route}) => {
     }
     const getData = (cond) => {
         setLoading(true)
-        if (route.params.status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((number, msg) => {
-                    if (number) {
                         database()
                             .ref('/allPescriptions')
                             .on('value', snapshot => {
                                 setLoading(false)
                                 if (snapshot.val()) {
-                                    let data = [], items
-                                    for (let len = 0; len < snapshot.val().length; len++) {
-                                        if(snapshot.val()[len].phoneNo === phoneNo) {
-                                            data.push(snapshot.val()[len])
-                                        }
-                                    }
+                                    let data = snapshot.val(), items
+                                    
                                     for (let i = 0; i < data.length; i++) {
                                         for (let j = 0; j < data[i].fileDetails.length; j++) {
                                             data[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String
@@ -76,32 +67,6 @@ const PescriptionsScreen = ({navigation, route}) => {
                                     setDetails([])
                                 }
                             })
-                    }
-                })
-        } else {
-            AsyncStorage
-                .getItem('anonymusPescriptions')
-                .then((data) => {
-                    setLoading(false)
-                    if (data && JSON.parse(data) > 0) {
-                        let mainData = JSON.parse(data), items
-                        for (let i = 0; i < mainData.length; i++) {
-                            for (let j = 0; j < mainData[i].fileDetails.length; j++) {
-                                mainData[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String
-                            }
-                        }
-                        if(cond === 'active') {
-                            items = mainData.filter(item => item.active === true)
-                        } else {
-                            items = mainData.filter(item => item.active === false)
-                        }
-                        
-                        setDetails(items)
-                    } else {
-                        setDetails([])
-                    }
-                })
-        }
     }
 
     const onPressDownload = (item) => {
